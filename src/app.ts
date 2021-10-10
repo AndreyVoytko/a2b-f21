@@ -507,7 +507,7 @@ class Drawing extends DrawingCommon {
 
         this.scene.add( objectRoot );
 
-        objectRoot.rotateY(1.5)
+        objectRoot.rotateY(2)
 
     }
 
