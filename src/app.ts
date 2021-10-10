@@ -8,6 +8,7 @@ class Drawing extends DrawingCommon {
     constructor (canv: HTMLElement) {
         super (canv)
         this.camera.lookAt(new THREE.Vector3())
+
     }
 
     /*
@@ -234,6 +235,7 @@ class Drawing extends DrawingCommon {
         //left arm joint 
 
         const leftArmJoint = new THREE.Group();
+        leftArmJoint.name = "left arm joint"
         upperBody.add(leftArmJoint);
 
         var geometry: THREE.BufferGeometry = new THREE.IcosahedronGeometry(0.2, 10);
@@ -404,6 +406,7 @@ class Drawing extends DrawingCommon {
         //right wing joint 
 
         const rightWingJoint = new THREE.Group();
+        rightWingJoint.name = "right wing joint";
         upperBody.add(rightWingJoint);
 
         var geometry: THREE.BufferGeometry = new THREE.IcosahedronGeometry(0.1, 10);
@@ -448,6 +451,7 @@ class Drawing extends DrawingCommon {
         //left wing joint 
 
         const lefttWingJoint = new THREE.Group();
+        lefttWingJoint.name = "left wing joint"
         upperBody.add(lefttWingJoint);
 
         var geometry: THREE.BufferGeometry = new THREE.IcosahedronGeometry(0.1, 10);
@@ -502,12 +506,32 @@ class Drawing extends DrawingCommon {
 
 
         this.scene.add( objectRoot );
+
+        objectRoot.rotateY(1.5)
+
     }
 
 	/*
 	Update the scene during requestAnimationFrame callback before rendering
-	*/
-	updateScene(time: DOMHighResTimeStamp){}
+    */
+    delta: number = 0.05
+    time1: number = 0
+
+	updateScene(time: DOMHighResTimeStamp){
+        if (this.time1 > 0.3) {
+            this.delta = -this.delta
+        } else if (this.time1 < 0) {
+            this.delta = -this.delta
+        }
+        this.time1 = this.time1 + this.delta
+        this.camera.translateZ(this.delta)
+        this.camera.rotateY((-1) * this.delta / 10)
+        this.scene.getObjectByName("left arm joint")?.rotateX(this.delta / 10)
+        this.scene.getObjectByName("left wing joint")?.rotateX(-this.delta * 10)
+        this.scene.getObjectByName("right wing joint")?.rotateX(this.delta * 10)
+        
+
+    }
 }
 
 // a global variable for our state.  We implement the drawing as a class, and 
